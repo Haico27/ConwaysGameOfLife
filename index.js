@@ -1,5 +1,5 @@
-var boardWidth = 10;
-var boardHeight = 5;
+var gridHeight = prompt("Enter grid height:");
+var gridWidth = prompt("Enter grid width: ");
 
 function createBoard(height, width) {
   var board = document.getElementById('board');
@@ -17,7 +17,6 @@ function createBoard(height, width) {
     }
     board.appendChild(row)
   }
-
 }
 
-createBoard(boardHeight, boardWidth)
+createBoard(gridHeight, gridWidth)
