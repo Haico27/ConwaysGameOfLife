@@ -1,0 +1,17 @@
+#game {
+  border: solid red 1px;
+}
+
+.gridCell {
+  height: 20px;
+  width: 20px;
+  border: 1px solid black;
+}
+
+.row {
+  display: inline-block;
+}
+
+.alive {
+  background-color: red;
+}
