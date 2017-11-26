@@ -1,13 +1,19 @@
-var gridHeight = prompt("Enter grid height:");
-var gridWidth = prompt("Enter grid width: ");
+
+
+
+
+var gridHeight = prompt("Enter gridHeight: ");
+var gridWidth = prompt("Enter gridWidth: ");
+
 
 function createBoard(height, width) {
   var board = document.getElementById('board');
 
   for (var x = 0; x < width; x++) {
     var row = document.createElement("div");
-    row.className = "row"
-    for (var y = 1; y <= height; y++) {
+    row.id = "row-" + x;
+    row.className = "row";
+    for (var y = 0; y < height; y++) {
       var cell = document.createElement("div");
       cell.className = "gridCell";
       cell.id = "cell-" + x + "-" + y;
@@ -15,44 +21,141 @@ function createBoard(height, width) {
         var x = event.target.id[5];
         var y = event.target.id[7];
         event.target.classList.toggle('alive')
-
       })
 
       row.appendChild(cell);
     }
+    console.log("row: ", row)
     board.appendChild(row)
   }
 }
 
-createBoard(gridHeight, gridWidth)
+window.onload = function() {
+  console.log("window.onload")
+  createBoard(gridHeight, gridWidth)
+}
 
 
-//function that returns the number of alive neighbours of a cell with coordinates x and y
+
+//function that returns the number of alive neighbours of the cell with coordinates x and y
 function numberOfAliveNeighbours(x,y) {
   var aliveNeighbours = 0;
 
-  var self = document.getElementById('cell-' + x + '-' + y)
-
-  //don't count the cell itself, only its neighbours
-  if (self.classList.contains('alive')) {
-    aliveNeighbours--;
-  }
+  var getIdSelf = getCellId(x,y)
+  console.log("getIdSelf: ", getIdSelf)
 
 
-  for (var i = x-1; i <= x+1; i++) {
-    for (var j = y-1; j <= y+1; j++) {
+    var elementId = document.getElementById(getIdSelf)
 
-      //the 10 stands for the gridHeight and gridWidth, needs to be changed when this function is called in runGame function
-      if (i>=0 && i<10 && j>=0 && j<10) {
-        var cellId = document.getElementById('cell-' + i + '-' + j)
-        console.log("cellId: ", cellId)
-        if(cellId.classList.contains('alive')) {
+
+
+
+    if (elementId.classList.contains('alive')) {
+      aliveNeighbours--
+    }
+
+
+  for(var i=x-1; i<=x+1; i++) {
+    for(var j=y-1; j<=y+1; j++) {
+      var cellId = getCellId(i,j)
+      var neighbourElement = document.getElementById(cellId)
+
+      if( i >= 0 && i < gridWidth && j >= 0 && j < gridHeight && neighbourElement !== null) {
+        if(neighbourElement.classList.contains('alive')) {
           aliveNeighbours++;
         }
       }
-
     }
   }
 
+
+  console.log("aliveNeighbours: ", aliveNeighbours)
+
   return aliveNeighbours
+}
+
+
+
+function getCellId(x,y) {
+  return 'cell-' + x + '-' + y;
+}
+
+function showNextGeneration() {
+  setInterval(function() {
+    var boardValues = [];
+
+    for (var i = 0; i < gridWidth; i++) {
+      var row = [];
+      for (var j = 0; j < gridHeight; j++) {
+          var cellId = getCellId(i,j)
+          var elementId = document.getElementById(cellId)
+
+          var aliveNeighbours = numberOfAliveNeighbours(i,j);
+
+
+            if(elementId.classList.contains('alive')) {
+              //cell dies, death by isolation
+              if (aliveNeighbours <= 1) {
+                row.push(false)
+              //cell dies, death by overcrowding
+              } else if (aliveNeighbours >= 4){
+                row.push(false)
+              }
+            } else {
+              //cell comes alive, birth
+                if (aliveNeighbours === 3) {
+                  row.push(true)
+                } else {
+                  row.push(false)
+                }
+
+          }
+        }
+      boardValues.push(row)
+    }
+
+    for (var i = 0; i < boardValues.length; i++) {
+      var row = boardValues[i]
+      console.log("boardValues.length: ", boardValues.length)
+      //
+      for (var j = 0; j < row.length; j++) {
+          var cell = row[j]
+          var cellId = getCellId(i,j)
+          var elementId = document.getElementById(cellId)
+          console.log("row.length", row.length)
+          console.log("cell: ", cell)
+
+
+
+        var cell = row[j]
+        console.log("cellId: ", cellId)
+        console.log("cell: ", cell)
+
+
+        if (cell) {
+          elementId.classList.add('alive')
+          console.log("cellId after added class: ", cellId)
+        } else {
+          elementId.classList.remove('alive')
+          console.log("cellId after removed class: ", cellId)
+        }
+
+      }
+    }
+
+
+
+
+
+
+
+    //check each cell according to the rules of the Game
+
+
+
+    //add a new class to each cell
+
+
+
+  }, 1000)
 }
