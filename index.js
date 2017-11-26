@@ -100,6 +100,8 @@ function showNextGeneration() {
               //cell dies, death by overcrowding
               } else if (aliveNeighbours >= 4){
                 row.push(false)
+              } else {
+                row.push(true)
               }
             } else {
               //cell comes alive, birth
@@ -116,29 +118,17 @@ function showNextGeneration() {
 
     for (var i = 0; i < boardValues.length; i++) {
       var row = boardValues[i]
-      console.log("boardValues.length: ", boardValues.length)
-      //
+
       for (var j = 0; j < row.length; j++) {
           var cell = row[j]
           var cellId = getCellId(i,j)
           var elementId = document.getElementById(cellId)
-          console.log("row.length", row.length)
-          console.log("cell: ", cell)
 
-
-
-        var cell = row[j]
-        console.log("cellId: ", cellId)
-        console.log("cell: ", cell)
-
-
-        if (cell) {
-          elementId.classList.add('alive')
-          console.log("cellId after added class: ", cellId)
-        } else {
-          elementId.classList.remove('alive')
-          console.log("cellId after removed class: ", cellId)
-        }
+          if (cell) {
+            elementId.classList.add('alive')
+          } else {
+            elementId.classList.remove('alive')
+          }
 
       }
     }
@@ -157,5 +147,5 @@ function showNextGeneration() {
 
 
 
-  }, 1000)
+  }, 500)
 }
