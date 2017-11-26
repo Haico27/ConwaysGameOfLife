@@ -1,6 +1,3 @@
-
-
-
 //user can set the height and width of the grid
 var gridHeight = prompt("Enter gridHeight: ");
 var gridWidth = prompt("Enter gridWidth: ");
